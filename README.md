@@ -55,7 +55,7 @@ Everything has a working default except the two passwords.
 | `QLO_ADMIN_EMAIL` | `admin@example.com` | first admin |
 | `QLO_ADMIN_PASSWORD` | — | **required** on the first boot; at least 8 characters |
 | `QLO_ADMIN_FIRSTNAME` / `QLO_ADMIN_LASTNAME` | `Hotel` / `Manager` | first admin's name |
-| `QLO_ADMIN_DIR` | `admin` | back-office directory; rename it to keep bots off the login page |
+| `QLO_ADMIN_DIR` | `backoffice` | back-office directory. QloApps refuses to serve a back office named `admin`, so this can never be `admin`; set something unguessable |
 | `QLO_SHOP_NAME` | `QloApps Hotel` | shop name |
 | `QLO_SHOP_COUNTRY` | `us` | ISO country used to seed taxes, currency and address format |
 | `QLO_SHOP_LANGUAGE` | `en` | installation language |

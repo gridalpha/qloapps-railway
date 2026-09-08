@@ -29,9 +29,15 @@ esac
 PUBLIC_DOMAIN="${QLO_PUBLIC_DOMAIN:-${RAILWAY_PUBLIC_DOMAIN:-}}"
 SERVER_NAME="${PUBLIC_DOMAIN:-localhost}"
 
-ADMIN_DIR="${QLO_ADMIN_DIR:-admin}"
+# QloApps refuses to serve the back office at all while its directory is literally
+# named "admin" - it answers every request with "renamed the /admin folder". So the
+# rename is mandatory, not hardening, and the default has to be something else.
+ADMIN_DIR="${QLO_ADMIN_DIR:-backoffice}"
 if ! printf '%s' "$ADMIN_DIR" | grep -Eq '^[A-Za-z0-9_-]{2,40}$'; then
     die "QLO_ADMIN_DIR must match [A-Za-z0-9_-]{2,40}, got '$ADMIN_DIR'"
+fi
+if [ "$ADMIN_DIR" = "admin" ]; then
+    die "QLO_ADMIN_DIR cannot be 'admin' - QloApps blocks the back office under that name"
 fi
 
 ADMIN_EMAIL="${QLO_ADMIN_EMAIL:-admin@example.com}"
@@ -89,8 +95,8 @@ for d in img upload download modules themes translations mails; do
 done
 printf '%s\n' "$SEED_VERSION" > "$STAMP_FILE"
 
-if [ "$ADMIN_DIR" != "admin" ] && [ -d "$APP_DIR/admin" ]; then
-    log "renaming the admin directory to $ADMIN_DIR"
+if [ -d "$APP_DIR/admin" ]; then
+    log "back office directory: /$ADMIN_DIR/"
     mv "$APP_DIR/admin" "$APP_DIR/$ADMIN_DIR"
 fi
 
